@@ -8,8 +8,8 @@ class LogPlugin implements Plugin<Project> {
         println "========================";
         println "hello gradle plugin!";
         println "========================";
-        project.task('testPlugin') << {
-            println "test plugin successfully"
-        }
+//        project.task('testPlugin') << {
+//            println "test plugin successfully"
+//        }
     }
 }

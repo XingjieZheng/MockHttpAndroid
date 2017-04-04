@@ -5,6 +5,9 @@
       <module fileurl="file://$PROJECT_DIR$/PluginDemo.iml" filepath="$PROJECT_DIR$/PluginDemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/log-plugin/log-plugin.iml" filepath="$PROJECT_DIR$/log-plugin/log-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mock-annotations/mock-annotations.iml" filepath="$PROJECT_DIR$/mock-annotations/mock-annotations.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mock-plugin/mock-plugin.iml" filepath="$PROJECT_DIR$/mock-plugin/mock-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mock-runtime/mock-runtime.iml" filepath="$PROJECT_DIR$/mock-runtime/mock-runtime.iml" />
     </modules>
   </component>
 </project>

@@ -1,1 +1,1 @@
-include ':app', ':log-plugin'
+include ':app', ':log-plugin', ':mock-annotations', ':mock-plugin', ':mock-runtime'

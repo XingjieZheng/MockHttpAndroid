@@ -10,6 +10,9 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/log-plugin" />
+            <option value="$PROJECT_DIR$/mock-annotations" />
+            <option value="$PROJECT_DIR$/mock-plugin" />
+            <option value="$PROJECT_DIR$/mock-runtime" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
