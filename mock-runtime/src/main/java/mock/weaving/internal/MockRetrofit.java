@@ -68,7 +68,7 @@ public class MockRetrofit {
                 port = ((DebugMockRetrofit) annotation).port();
             }
         }
-        if (host == null) {
+        if (host == null || !methodSignature.getReturnType().equals(Retrofit.class)) {
             Log.e(asTag(cls), "@DebugMockRetrofit host can not be empty");
             startNanos = System.nanoTime();
             Object result = joinPoint.proceed();
