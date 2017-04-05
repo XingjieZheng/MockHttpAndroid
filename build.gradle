@@ -1,29 +1,30 @@
-//apply plugin: 'com.xingjiezheng.plugin'
-
+ext {
+    localMaven = 'E:/LocalMaven/Repository'
+    pluginGroup = 'com.xingjiezheng.mock'
+    pluginVersion = '1.0.0'
+}
 buildscript {
     repositories {
         maven {//本地Maven仓库地址
-            url uri('D:/repos')
+            url uri('E:/LocalMaven/Repository')
         }
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.0'
+        classpath 'com.android.tools.build:gradle:2.3.1'
 //        classpath 'com.xingjiezheng.plugin:log-plugin:1.0.0'
         classpath 'org.aspectj:aspectjtools:1.8.6'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
 
         classpath 'com.xingjiezheng.mock:mock-plugin:1.0.0'
 
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
     }
 }
 
 allprojects {
     repositories {
         maven {//本地Maven仓库地址
-            url uri('D:/repos')
+            url uri(rootProject.ext.localMaven)
         }
         jcenter()
     }

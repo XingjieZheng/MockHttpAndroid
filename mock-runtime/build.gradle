@@ -35,6 +35,12 @@ android {
 dependencies {
     compile 'org.aspectj:aspectjrt:1.8.6'
     compile project(':mock-annotations')
+
+
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
 }
 
 android.libraryVariants.all { variant ->
@@ -73,8 +79,8 @@ android.libraryVariants.all { variant ->
     }
 }
 
-group = 'com.xingjiezheng.mock'
-version = '1.0.0'
+group = rootProject.ext.pluginGroup
+version = rootProject.ext.pluginVersion
 
 uploadArchives {
     repositories {
@@ -83,7 +89,7 @@ uploadArchives {
             // repository(url: "http://www.xxx.com/repos") {
             //    authentication(userName: "admin", password: "admin")
             // }
-            repository(url: uri('D:/repos'))
+            repository(url: uri(rootProject.ext.localMaven))
         }
     }
 }

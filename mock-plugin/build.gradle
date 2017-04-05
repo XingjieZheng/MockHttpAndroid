@@ -20,8 +20,8 @@ repositories {
     mavenCentral()
 }
 
-group = 'com.xingjiezheng.mock'
-version = '1.0.0'
+group = rootProject.ext.pluginGroup
+version = rootProject.ext.pluginVersion
 
 uploadArchives {
     repositories {
@@ -30,7 +30,7 @@ uploadArchives {
             // repository(url: "http://www.xxx.com/repos") {
             //    authentication(userName: "admin", password: "admin")
             // }
-            repository(url: uri('D:/repos'))
+            repository(url: uri(rootProject.ext.localMaven))
         }
     }
 }
