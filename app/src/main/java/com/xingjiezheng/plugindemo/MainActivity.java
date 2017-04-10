@@ -3,6 +3,7 @@ package com.xingjiezheng.plugindemo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.xingjiezheng.plugindemo.http.BaseSubscriber;
@@ -13,18 +14,23 @@ import com.xingjiezheng.plugindemo.http.ZARetrofit;
 import com.xingjiezheng.plugindemo.login.LoginService;
 
 import mock.weaving.DebugMockRetrofit;
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
 
 public class MainActivity extends AppCompatActivity {
 
-
+    private TextView textView;
     private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        textView = (TextView) findViewById(R.id.text);
+
 
         helloWorld();
         mockHttp();
@@ -47,11 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private Retrofit getRetrofit() {
         return ZARetrofit.getInstance().getRetrofit();
     }
-
     private void request() {
-
-        LoginService service = getRetrofit().create(LoginService.class);
-
 //        OkHttpClient client = new OkHttpClient.Builder()
 //                .build();
 //        Retrofit mRetrofit = new Retrofit.Builder()
@@ -62,15 +64,19 @@ public class MainActivity extends AppCompatActivity {
 //                .build();
 //        LoginService service = mRetrofit.create(LoginService.class);
 
+        LoginService service = getRetrofit().create(LoginService.class);
 
-        Observable<ZAResponse<String>> observable = service.login("40756205", "111111", 1, true, "902684", "3", "3.8.1");
+        Observable<ZAResponse<Object>> observable = service.login();
         HttpMethod.toSubscribe(observable,
-                new BaseSubscriber(new SubscriberListener<ZAResponse<String>>() {
+                new BaseSubscriber(new SubscriberListener<ZAResponse<Object>>() {
 
                     @Override
-                    public void onNext(ZAResponse<String> response) {
-                        Log.i(TAG, new Gson().toJson(response));
+                    public void onNext(ZAResponse<Object> response) {
+                        String result = new Gson().toJson(response);
+                        Log.i(TAG, result);
+                        textView.setText(result);
                     }
                 }, this));
+
     }
 }

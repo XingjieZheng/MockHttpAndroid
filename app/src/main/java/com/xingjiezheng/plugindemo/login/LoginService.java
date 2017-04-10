@@ -11,12 +11,6 @@ public interface LoginService {
 
     @FormUrlEncoded
     @POST("login/login.do")
-    Observable<ZAResponse<String>> login(@Field("account") String account,
-                                         @Field("password") String password,
-                                         @Field("lgType") int lgType,
-                                         @Field("isAutoLogin") boolean isAutoLogin,
-                                         @Field("channelId") String channelId,
-                                         @Field("platform") String platform,
-                                         @Field("version") String version);
+    Observable<ZAResponse<Object>> login();
 
 }

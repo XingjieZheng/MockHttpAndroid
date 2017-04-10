@@ -19,5 +19,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface DebugMockRetrofit {
     String host();
 
-    String port();
+    String port() default "";
 }
