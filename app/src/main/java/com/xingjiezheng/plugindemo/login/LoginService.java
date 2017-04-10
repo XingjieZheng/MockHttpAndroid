@@ -9,7 +9,6 @@ import rx.Observable;
 
 public interface LoginService {
 
-    @FormUrlEncoded
     @POST("login/login.do")
     Observable<ZAResponse<Object>> login();
 
