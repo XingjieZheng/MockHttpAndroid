@@ -14,7 +14,7 @@ import mock.weaving.MockUri;
 
 public class HttpClient {
 
-    public static String serverUrl = "http://http://10.10.152.48:8070/";
+    public static String serverUrl = "http://10.10.152.48:8070/";
     private static final String TAG = HttpClient.class.getSimpleName();
 
     @MockUri(host = "10.10.120.127", port = "9999")
