@@ -5,6 +5,7 @@ import android.os.Looper;
 import android.os.Trace;
 import android.util.Log;
 
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
@@ -13,26 +14,13 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.CodeSignature;
 import org.aspectj.lang.reflect.MethodSignature;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
 
-import mock.weaving.DebugMockRetrofit;
-import okhttp3.OkHttpClient;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
-
-/**
- * Created by XingjieZheng
- * on 2017/4/4.
- */
-
 @Aspect
-public class MockRetrofit {
+public class Hugo {
     private static volatile boolean enabled = true;
 
-    @Pointcut("within(@mock.weaving.DebugMockRetrofit *)")
+    @Pointcut("within(@mock.weaving.DebugLog *)")
     public void withinAnnotatedClass() {
     }
 
@@ -40,72 +28,37 @@ public class MockRetrofit {
     public void methodInsideAnnotatedType() {
     }
 
-    @Pointcut("execution(@mock.weaving.DebugMockRetrofit * *(..)) || methodInsideAnnotatedType()")
+    @Pointcut("execution(!synthetic *.new(..)) && withinAnnotatedClass()")
+    public void constructorInsideAnnotatedType() {
+    }
+
+    @Pointcut("execution(@mock.weaving.DebugLog * *(..)) || methodInsideAnnotatedType()")
     public void method() {
     }
 
+    @Pointcut("execution(@mock.weaving.DebugLog *.new(..)) || constructorInsideAnnotatedType()")
+    public void constructor() {
+    }
+
     public static void setEnabled(boolean enabled) {
-        MockRetrofit.enabled = enabled;
+        Hugo.enabled = enabled;
     }
 
-
-    @Pointcut("call(@mock.weaving.DebugMockRetrofit * *(..))")
-    public void callMethod() {
-    }
-
-    //    @Around("method()")
-    @Around("callMethod()")
+    @Around("method() || constructor()")
     public Object logAndExecute(ProceedingJoinPoint joinPoint) throws Throwable {
         enterMethod(joinPoint);
 
         long startNanos = System.nanoTime();
-        long stopNanos;
-        long lengthMillis;
+        Object result = joinPoint.proceed();
+        long stopNanos = System.nanoTime();
+        long lengthMillis = TimeUnit.NANOSECONDS.toMillis(stopNanos - startNanos);
 
-        String url;
-        String host = null;
-        String port = null;
-        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
-        Class<?> cls = methodSignature.getDeclaringType();
-        Method method = methodSignature.getMethod();
-        for (Annotation annotation : method.getDeclaredAnnotations()) {
-            if (annotation.annotationType().equals(DebugMockRetrofit.class)) {
-                host = ((DebugMockRetrofit) annotation).host();
-                port = ((DebugMockRetrofit) annotation).port();
-            }
-        }
-        if (host == null || !methodSignature.getReturnType().equals(Retrofit.class)) {
-            Log.e(asTag(cls), "@DebugMockRetrofit host can not be empty");
-            startNanos = System.nanoTime();
-            Object result = joinPoint.proceed();
-            stopNanos = System.nanoTime();
-            lengthMillis = TimeUnit.NANOSECONDS.toMillis(stopNanos - startNanos);
-            exitMethod(joinPoint, result, lengthMillis);
-            return result;
-        }
-        if (port == null) {
-            url = host;
-        } else {
-            url = host + ":" + port + "/";
-        }
-        url = "http://" + url;
-        Log.i(asTag(cls), "@DebugMockRetrofit url:" + url);
+        exitMethod(joinPoint, result, lengthMillis);
 
-        OkHttpClient client = new OkHttpClient.Builder().build();
-        Retrofit mRetrofit = new Retrofit.Builder()
-                .baseUrl(url)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .client(client)
-                .build();
-        stopNanos = System.nanoTime();
-        lengthMillis = TimeUnit.NANOSECONDS.toMillis(stopNanos - startNanos);
-        exitMethod(joinPoint, mRetrofit, lengthMillis);
-        return mRetrofit;
+        return result;
     }
 
-
-    private static void enterMethod(ProceedingJoinPoint joinPoint) {
+    private static void enterMethod(JoinPoint joinPoint) {
         if (!enabled) return;
 
         CodeSignature codeSignature = (CodeSignature) joinPoint.getSignature();
@@ -130,7 +83,7 @@ public class MockRetrofit {
             builder.append(" [Thread:\"").append(Thread.currentThread().getName()).append("\"]");
         }
 
-        Log.d(asTag(cls), builder.toString());
+        Log.v(asTag(cls), builder.toString());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             final String section = builder.toString().substring(2);
@@ -138,7 +91,7 @@ public class MockRetrofit {
         }
     }
 
-    private static void exitMethod(ProceedingJoinPoint joinPoint, Object result, long lengthMillis) {
+    private static void exitMethod(JoinPoint joinPoint, Object result, long lengthMillis) {
         if (!enabled) return;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -163,7 +116,7 @@ public class MockRetrofit {
             builder.append(Strings.toString(result));
         }
 
-        Log.d(asTag(cls), builder.toString());
+        Log.v(asTag(cls), builder.toString());
     }
 
     private static String asTag(Class<?> cls) {

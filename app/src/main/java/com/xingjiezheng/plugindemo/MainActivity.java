@@ -3,6 +3,7 @@ package com.xingjiezheng.plugindemo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -13,11 +14,9 @@ import com.xingjiezheng.plugindemo.http.ZAResponse;
 import com.xingjiezheng.plugindemo.http.ZARetrofit;
 import com.xingjiezheng.plugindemo.login.LoginService;
 
+import mock.weaving.DebugLog;
 import mock.weaving.DebugMockRetrofit;
-import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,28 +30,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         textView = (TextView) findViewById(R.id.text);
 
-
         helloWorld();
-        mockHttp();
-
         request();
     }
 
-    //    @DebugLog
+    @DebugLog
     private void helloWorld() {
         Log.i(TAG, "hello world");
-
-    }
-
-    //    @DebugHttpMock
-    private void mockHttp() {
-        Log.i(TAG, "mock http");
     }
 
     @DebugMockRetrofit(host = "10.10.124.92", port = "9999")
     private Retrofit getRetrofit() {
         return ZARetrofit.getInstance().getRetrofit();
     }
+
     private void request() {
 //        OkHttpClient client = new OkHttpClient.Builder()
 //                .build();

@@ -17,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * @date 2016/5/24
  */
 public class ZARetrofit {
-    private static String mServerAddress = "http://10.10.10.161";
+    private static String mServerAddress /*= "http://10.10.10.161"*/;
     private static ZARetrofit instance;
     private static final int DEFAULT_TIMEOUT = 15;
     private Retrofit mRetrofit;
@@ -27,6 +27,7 @@ public class ZARetrofit {
     }
 
     private void initRetrofit() {
+        mServerAddress = "https://mobileapi.zhenai.com/";
         initRetrofit(mServerAddress);
     }
 
