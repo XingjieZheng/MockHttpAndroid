@@ -31,12 +31,11 @@ public class CflowTestActivity extends AppCompatActivity {
 //                cfowTest();
 //            }
 //        });
-        cfowTest();
+        cflowTest();
     }
 
-    @DebugLog
-    private void cfowTest() {
-        Log.i(TAG, "Cfow Test");
+    private void cflowTest() {
+        Log.i(TAG, "cflow Test");
         httpClient.createURI("other.do");
 
         request();
