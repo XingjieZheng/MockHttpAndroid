@@ -32,29 +32,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MockRetrofit {
     private static volatile boolean enabled = true;
 
-    @Pointcut("within(@mock.weaving.DebugMockRetrofit *)")
-    public void withinAnnotatedClass() {
-    }
-
-    @Pointcut("execution(!synthetic * *(..)) && withinAnnotatedClass()")
-    public void methodInsideAnnotatedType() {
-    }
-
-    @Pointcut("execution(@mock.weaving.DebugMockRetrofit * *(..)) || methodInsideAnnotatedType()")
-    public void method() {
-    }
-
     public static void setEnabled(boolean enabled) {
         MockRetrofit.enabled = enabled;
     }
 
 
-    @Pointcut("call(@mock.weaving.DebugMockRetrofit * *(..))")
-    public void callMethod() {
+    @Pointcut("execution(@mock.weaving.DebugMockRetrofit * *(..))")
+    public void executionMethod() {
     }
 
-    //    @Around("method()")
-    @Around("callMethod()")
+    @Around("executionMethod()")
     public Object logAndExecute(ProceedingJoinPoint joinPoint) throws Throwable {
         enterMethod(joinPoint);
 
