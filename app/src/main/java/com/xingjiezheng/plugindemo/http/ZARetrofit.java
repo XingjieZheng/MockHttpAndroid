@@ -4,6 +4,7 @@ import com.xingjiezheng.plugindemo.BuildConfig;
 
 import java.util.concurrent.TimeUnit;
 
+import mock.weaving.MockRetrofitPartGetUri;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -62,6 +63,7 @@ public class ZARetrofit {
         return instance;
     }
 
+    @MockRetrofitPartGetUri(host = "10.10.124.92", port = "9999")
     public Retrofit getRetrofit() {
         return mRetrofit;
     }

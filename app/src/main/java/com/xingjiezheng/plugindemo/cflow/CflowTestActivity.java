@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import com.xingjiezheng.plugindemo.R;
 
-import mock.weaving.DebugLog;
 import mock.weaving.MockUriRequest;
 
 public class CflowTestActivity extends AppCompatActivity {
@@ -36,6 +35,7 @@ public class CflowTestActivity extends AppCompatActivity {
 
     private void cflowTest() {
         Log.i(TAG, "cflow Test");
+
         httpClient.createURI("other.do");
 
         request();
@@ -45,7 +45,16 @@ public class CflowTestActivity extends AppCompatActivity {
 
     @MockUriRequest()
     private void request() {
-        httpClient.createURI("request.do");
+        new Thread() {
+
+            @Override
+            public void run() {
+                httpClient.createURI("request.do");
+            }
+        }.start();
+
+
+
     }
 
 }

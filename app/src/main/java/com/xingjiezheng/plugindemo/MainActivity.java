@@ -16,6 +16,7 @@ import com.xingjiezheng.plugindemo.login.LoginService;
 
 import mock.weaving.DebugLog;
 import mock.weaving.DebugMockRetrofit;
+import mock.weaving.MockRetrofitPartRequest;
 import retrofit2.Retrofit;
 import rx.Observable;
 
@@ -31,7 +32,8 @@ public class MainActivity extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.text);
 
         helloWorld();
-        request();
+//        request();
+        request2();
     }
 
     @DebugLog
@@ -70,4 +72,25 @@ public class MainActivity extends AppCompatActivity {
                 }, this));
 
     }
+
+
+
+    @MockRetrofitPartRequest
+    private void request2() {
+        LoginService service = ZARetrofit.getInstance().getRetrofit().create(LoginService.class);
+
+        Observable<ZAResponse<Object>> observable = service.login();
+        HttpMethod.toSubscribe(observable,
+                new BaseSubscriber(new SubscriberListener<ZAResponse<Object>>() {
+
+                    @Override
+                    public void onNext(ZAResponse<Object> response) {
+                        String result = new Gson().toJson(response);
+                        Log.i(TAG, result);
+                        textView.setText(result);
+                    }
+                }, this));
+
+    }
+
 }
